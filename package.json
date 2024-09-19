@@ -2,13 +2,13 @@
   "name": "light-saas-landing-page",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Sagar-meshram.github.io/sih2", 
+  "homepage": "https://Sagar-meshram.github.io/sih2",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "npm run build",
+    "predeploy": "next build && next export",
     "deploy": "gh-pages -d out"
   },
   "dependencies": {
