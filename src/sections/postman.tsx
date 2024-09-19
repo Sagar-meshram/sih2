@@ -1,11 +1,15 @@
 "use client"; // Mark as client component
 
 import React, { useState } from 'react';
+import Image from 'next/image';
+
+// Define types for customers
+type CustomerKey = 'customerA' | 'customerB' | 'customerC';
 
 const Dashboard = () => {
   // State for modal, delivery times, reward points, and customer deliveries
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDelivery, setSelectedDelivery] = useState(null); // Track which delivery is being rescheduled
+  const [selectedDelivery, setSelectedDelivery] = useState<CustomerKey | null>(null); // Track which delivery is being rescheduled
   const [newTime, setNewTime] = useState(''); // Store the newly selected time
   const [deliveryTimes, setDeliveryTimes] = useState({
     customerA: '10:00 AM',
@@ -13,22 +17,22 @@ const Dashboard = () => {
     customerC: '2:00 PM',
   });
   const [rewardPoints, setRewardPoints] = useState(3000);
-  const [points, setPoints] = useState({
+  const [points, setPoints] = useState<Record<CustomerKey, number>>({
     customerA: 20,
     customerB: 20,
     customerC: 20,
   });
-  const [deliveries, setDeliveries] = useState(['customerA', 'customerB', 'customerC']); // List of active deliveries
+  const [deliveries, setDeliveries] = useState<CustomerKey[]>(['customerA', 'customerB', 'customerC']); // List of active deliveries
 
   // Open modal for rescheduling
-  const openModal = (customer) => {
+  const openModal = (customer: CustomerKey) => {
     setSelectedDelivery(customer); // Set the delivery being modified
     setIsModalOpen(true);
   };
 
   // Save the new delivery time
   const saveTime = () => {
-    if (newTime) {
+    if (newTime && selectedDelivery) {
       setDeliveryTimes((prev) => ({
         ...prev,
         [selectedDelivery]: newTime,
@@ -44,7 +48,7 @@ const Dashboard = () => {
   };
 
   // Complete delivery and remove it from the list
-  const completeDelivery = (customer) => {
+  const completeDelivery = (customer: CustomerKey) => {
     setRewardPoints(rewardPoints + points[customer]);
     setDeliveries((prevDeliveries) => prevDeliveries.filter((item) => item !== customer)); // Remove the completed delivery
   };
@@ -56,10 +60,12 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold">Postman Dashboard</h1>
         <div className="rewards-card bg-white shadow-lg rounded-lg p-4 flex items-center">
           {/* Larger Rewards Icon */}
-          <img
+          <Image
             src="/assets/rewards.jpeg" // Update this to the correct path for your icon
             alt="Rewards Icon"
-            className="w-12 h-12 mr-3" // Adjusted size to make the icon 48x48 pixels
+            width={48}
+            height={48} // Adjusted size to make the icon 48x48 pixels
+            className="mr-3"
           />
           <div>
             <p className="text-gray-500">Rewards Points</p>
@@ -73,9 +79,11 @@ const Dashboard = () => {
         <section id="map-card" className="bg-white rounded-lg shadow-md p-4 mb-6 max-w-xl mx-auto mr-8">
           <h2 className="text-xl font-semibold mb-4">Next Delivery</h2>
           <div className="map-container bg-gray-200 rounded-lg overflow-hidden">
-            <img
+            <Image
               src="/assets/postman.png"
               alt="Map showing direction for next delivery"
+              width={500}
+              height={300}
               className="w-full h-auto"
               style={{ marginLeft: '20px' }}
             />
