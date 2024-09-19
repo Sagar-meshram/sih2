@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export', // Ensure static export is enabled
+
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -28,7 +30,7 @@ const nextConfig = {
     return config;
   },
 
-  // ...other config
+  // Additional configurations, if any
 };
 
 export default nextConfig;
